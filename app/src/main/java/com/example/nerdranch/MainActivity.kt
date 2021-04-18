@@ -3,7 +3,6 @@ package com.example.nerdranch
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+    private lateinit var previousButton: Button
     private lateinit var nextButton: Button
     private lateinit var questionTextView: TextView
 
@@ -35,11 +35,21 @@ class MainActivity : AppCompatActivity() {
         questionTextView = findViewById(R.id.questionTextView)
         trueButton = findViewById(R.id.trueButton)
         falseButton = findViewById(R.id.falseButton)
+        previousButton = findViewById(R.id.previousButton)
         nextButton = findViewById(R.id.nextButton)
 
         trueButton.setOnClickListener { checkAnswer(true) }
 
         falseButton.setOnClickListener { checkAnswer(false) }
+
+        previousButton.setOnClickListener {
+            currentIndex = if (currentIndex == 0) {
+                questions.size - 1
+            } else {
+                currentIndex - 1
+            }
+            updateQuestion()
+        }
 
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questions.size

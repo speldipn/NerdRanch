@@ -6,6 +6,7 @@
     <string name="question_americas">아마존강은 아메리카 대륙에서 가장 긴 강이다</string>
     <string name="question_asia">바이킬 호수는 세계에서 가장 오래되고 가장 깊은 담수호다</string>
     <string name="question_australia">오스트레일리나는 섬이다</string>
+    <string name="previous_button">이전</string>
     <string name="next_button">다음</string>
     <string name="true_button">진실</string>
     <string name="false_button">거짓</string>
