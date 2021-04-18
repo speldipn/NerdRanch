@@ -45,25 +45,20 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/previousButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/previous_button"
-            app:icon="@drawable/arrow_left"
-            app:iconGravity="textStart"
-            app:iconPadding="10dp" />
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/arrow_left"
+            android:contentDescription="@string/next_button"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/nextButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/next_button"
-            app:icon="@drawable/arrow_right"
-            app:iconGravity="textEnd"
-            app:iconPadding="10dp" />
+            android:src="@drawable/arrow_right"
+            android:contentDescription="@string/next_button"/>
     </LinearLayout>
 </LinearLayout>
