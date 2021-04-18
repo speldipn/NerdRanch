@@ -1,11 +1,11 @@
 package com.example.nerdranch
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,36 +36,33 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.falseButton)
         nextButton = findViewById(R.id.nextButton)
 
-        trueButton.setOnClickListener {
-            if(questions[currentIndex].answer) {
-                showToastAnswer()
-            } else {
-                showToastNotAnswer()
-            }
-        }
+        trueButton.setOnClickListener { checkAnswer(true) }
 
-        falseButton.setOnClickListener {
-            if(!questions[currentIndex].answer) {
-                showToastAnswer()
-            } else {
-                showToastNotAnswer()
-            }
-        }
+        falseButton.setOnClickListener { checkAnswer(false) }
 
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questions.size
-            setQuestion(currentIndex)
+            updateQuestion()
         }
-        setQuestion(currentIndex)
+
+        updateQuestion()
     }
 
-    private fun showToastAnswer() = Toast.makeText(this, R.string.answer_pass, Toast.LENGTH_SHORT).show()
-
-    private fun showToastNotAnswer() = Toast.makeText(this, R.string.answer_not_pass, Toast.LENGTH_SHORT).show()
-
-    private fun setQuestion(index: Int) {
-        val questionTextResId = questions[index].textRedId
+    private fun updateQuestion() {
+        val questionTextResId = questions[currentIndex].textRedId
         questionTextView.setText(questionTextResId)
+    }
+
+    private fun checkAnswer(userAnswer: Boolean) {
+        val correctAnswer = questions[currentIndex].answer
+
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.answer_pass
+        } else {
+            R.string.answer_not_pass
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
     private fun print(msg: String) = Log.d(TAG, msg)
