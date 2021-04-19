@@ -1,5 +1,6 @@
 package com.example.nerdranch
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup()
+        print("onCreate called")
     }
 
     private fun setup() {
@@ -78,6 +80,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun print(msg: String) = Log.d(TAG, msg)
+
+    override fun onStart() {
+        super.onStart()
+        print("onStart called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        print("onResume called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        print("onPause called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        print("onStop called")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        print("onRestart called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        print("onDestroy called")
+    }
 
     companion object {
         const val TAG = "speldipn"
