@@ -85,8 +85,8 @@ class MainActivity : AppCompatActivity() {
         val correctAnswer = questions[currentIndex].answer
 
         val messageResId = if (userAnswer == correctAnswer) {
-            R.string.answer_pass
             answerCount += 1
+            R.string.answer_pass
         } else {
             R.string.answer_not_pass
         }
