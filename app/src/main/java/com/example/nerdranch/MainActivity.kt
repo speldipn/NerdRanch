@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nextButton.setOnClickListener {
-            quizViewModel.currentIndex = (quizViewModel.currentIndex + 1) % quizViewModel.questions.size
+            quizViewModel.moveToNext()
             if (quizViewModel.currentIndex == 0) {
                 showScore()
             }
@@ -82,12 +82,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        val questionTextResId = quizViewModel.questions[quizViewModel.currentIndex].textRedId
+        val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
     }
 
     private fun checkAnswer(userAnswer: Boolean): Boolean {
-        val correctAnswer = quizViewModel.questions[quizViewModel.currentIndex].answer
+        val correctAnswer = quizViewModel.currentQuestionAnswer
 
         val messageResId = if (userAnswer == correctAnswer) {
             quizViewModel.answerCount += 1
@@ -102,37 +102,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun print(msg: String) = Log.d(TAG, msg)
-
-    override fun onRestart() {
-        super.onRestart()
-        print("onRestart")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        print("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        print("onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        print("onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        print("onStop")
-    }
-
-    override fun onDestroy() {
-        print("onDestroy inFinishing: ${isFinishing}")
-        super.onDestroy()
-        print("onDestroy inFinishing: ${isFinishing}")
-    }
 
     companion object {
         const val TAG = "QuizViewModel"

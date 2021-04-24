@@ -1,11 +1,9 @@
 package com.example.nerdranch
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 
-private const val TAG = "QuizViewModel"
-
 class QuizViewModel : ViewModel() {
+
     val questions = listOf(
             Question(R.string.question_australia, true),
             Question(R.string.question_oceans, true),
@@ -17,12 +15,13 @@ class QuizViewModel : ViewModel() {
     var currentIndex = 0
     var answerCount = 0
 
-    init {
-        Log.d(TAG, "ViewModel instance created $this")
-    }
+    val currentQuestionAnswer: Boolean
+        get() = questions[currentIndex].answer
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d(TAG, "ViewModel instance about to be destroyed $this")
+    val currentQuestionText: Int
+        get() = questions[currentIndex].textRedId
+
+    fun moveToNext() {
+        currentIndex = (currentIndex + 1) % questions.size
     }
 }
