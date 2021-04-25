@@ -2,14 +2,20 @@ package com.example.nerdranch
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 
+private const val KEY_INDEX = "index"
+
 class MainActivity : AppCompatActivity() {
 
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
     private lateinit var rootView: LinearLayout
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
@@ -17,22 +23,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: ImageButton
     private lateinit var questionTextView: TextView
     private lateinit var newButton: Button
-    private lateinit var quizViewModel: QuizViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup()
+
+        savedInstanceState?.apply {
+            Log.d(TAG, "onCreate ${quizViewModel.currentIndex}")
+            quizViewModel.currentIndex = savedInstanceState.getInt(KEY_INDEX)
+        } ?: run {
+            Log.d(TAG, "onCreate SIS null")
+        }
     }
 
-    private fun setupViewModel() {
-        quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
-        print("Got a QuizViewModel: $quizViewModel")
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
+        Log.d(TAG, "onSaveInstanceState")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d(TAG, "onRestoreInstanceState")
     }
 
     private fun setup() {
-        setupViewModel()
-
         rootView = findViewById(R.id.rootView)
         questionTextView = findViewById(R.id.questionTextView)
         trueButton = findViewById(R.id.trueButton)
