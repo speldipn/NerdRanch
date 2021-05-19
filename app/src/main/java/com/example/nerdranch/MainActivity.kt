@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 
 private const val KEY_INDEX = "index"
 
+// Jetpack: Foundation, Architecture, UI, Behavior
+
 class MainActivity : AppCompatActivity() {
 
     private val quizViewModel: QuizViewModel by lazy {
