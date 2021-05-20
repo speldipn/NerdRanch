@@ -2,7 +2,6 @@ package com.example.nerdranch
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 private const val KEY_INDEX = "index"
 
 // Jetpack: Foundation, Architecture, UI, Behavior
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var previousButton: ImageButton
     private lateinit var nextButton: ImageButton
     private lateinit var questionTextView: TextView
-    private lateinit var newButton: Button
+    private lateinit var cheatButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,22 +32,39 @@ class MainActivity : AppCompatActivity() {
         setup()
 
         savedInstanceState?.apply {
-            Log.d(TAG, "onCreate ${quizViewModel.currentIndex}")
             quizViewModel.currentIndex = savedInstanceState.getInt(KEY_INDEX)
         } ?: run {
-            Log.d(TAG, "onCreate SIS null")
+            print("onCreate: saved Instance ")
         }
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
-        Log.d(TAG, "onSaveInstanceState")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        Log.d(TAG, "onRestoreInstanceState")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != RESULT_OK) {
+            return
+        }
+
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            data?.run {
+                quizViewModel.isCheater = true
+                val isAnswer = getBooleanExtra(CheatActivity.ANSWER_RESULT, false)
+                if (isAnswer) {
+                    Log.d(TAG, getString(R.string.true_button))
+                } else {
+                    Log.d(TAG, getString(R.string.false_button))
+                }
+            }
+        }
     }
 
     private fun setup() {
@@ -57,12 +74,11 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.falseButton)
         previousButton = findViewById(R.id.previousButton)
         nextButton = findViewById(R.id.nextButton)
-        newButton = findViewById(R.id.newButton)
+        cheatButton = findViewById(R.id.cheatButton)
 
         trueButton.setOnClickListener {
             checkAnswer(true)
             nextButton.callOnClick()
-
         }
 
         falseButton.setOnClickListener {
@@ -87,8 +103,10 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
-        newButton.setOnClickListener {
-            startActivity(Intent(this, QuizViewModelActivity::class.java))
+        cheatButton.setOnClickListener {
+            val intent = Intent(this, CheatActivity::class.java)
+            intent.putExtra(ANSWER, quizViewModel.currentQuestionAnswer)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
 
         updateQuestion()
@@ -107,11 +125,17 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean): Boolean {
         val correctAnswer = quizViewModel.currentQuestionAnswer
 
-        val messageResId = if (userAnswer == correctAnswer) {
+        val messageResId = when {
+            quizViewModel.isCheater -> R.string.judgement_toast
+            userAnswer == correctAnswer -> R.string.answer_pass
+            else -> R.string.answer_not_pass
+
+        }
+
+        if (messageResId == R.string.answer_pass) {
             quizViewModel.answerCount += 1
-            R.string.answer_pass
-        } else {
-            R.string.answer_not_pass
+        } else if (messageResId == R.string.judgement_toast) {
+            quizViewModel.isCheater = false
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
@@ -122,6 +146,8 @@ class MainActivity : AppCompatActivity() {
     private fun print(msg: String) = Log.d(TAG, msg)
 
     companion object {
-        const val TAG = "QuizViewModel"
+        const val TAG = "MainActivity"
+        const val ANSWER = "ANSWER"
+        const val REQUEST_CODE_CHEAT = 0
     }
 }
