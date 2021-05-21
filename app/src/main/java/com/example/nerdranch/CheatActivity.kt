@@ -32,8 +32,8 @@ class CheatActivity : AppCompatActivity() {
             }
 
             val data = Intent().apply { putExtra(ANSWER_RESULT, isAnswer) }
-
             setResult(RESULT_OK, data)
+            finish()
         }
     }
 
